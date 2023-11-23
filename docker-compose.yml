@@ -1,0 +1,52 @@
+version: '3'
+
+services:
+    php:
+        build:
+            context: ./docker/php
+            dockerfile: Dockerfile
+        restart: unless-stopped
+        tty: true
+        volumes:
+            - ./:/var/www
+            - ./docker/php/local.ini:/usr/local/etc/php/conf.d/local.ini
+        working_dir: /var/www
+        networks:
+            - app-network
+
+    nginx:
+        image: nginx:1.24.0
+        restart: unless-stopped
+        tty: true
+        ports:
+            - 80:80
+        volumes:
+            - ./:/var/www
+            - ./docker/nginx/conf.d:/etc/nginx/conf.d/
+        networks:
+            - app-network
+
+    mysql:
+        image: mysql:8.0.35
+        restart: unless-stopped
+        tty: true
+        environment:
+            MYSQL_DATABASE: 'pot-luck'
+            MYSQL_USER: 'user'
+            MYSQL_PASSWORD: 'password'
+            MYSQL_ROOT_PASSWORD: 'password'
+        ports:
+            - 3306:3306
+        volumes:
+            - dbdata:/var/lib/mysql
+            - ./docker/mysql/my.cnf:/etc/mysql/my.cnf
+        networks:
+            - app-network
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  dbdata:
+    driver: local
