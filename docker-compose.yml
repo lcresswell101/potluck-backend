@@ -31,7 +31,7 @@ services:
         restart: unless-stopped
         tty: true
         environment:
-            MYSQL_DATABASE: 'pot-luck'
+            MYSQL_DATABASE: 'potluck'
             MYSQL_USER: 'user'
             MYSQL_PASSWORD: 'password'
             MYSQL_ROOT_PASSWORD: 'password'
