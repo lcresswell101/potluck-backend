@@ -2,6 +2,7 @@ version: '3'
 
 services:
     php:
+        image: potluck/php
         build:
             context: ./docker/php
             dockerfile: Dockerfile
